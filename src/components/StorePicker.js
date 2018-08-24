@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { getFunName } from '../helpers';
 
-class StorePicker extends React.Component {
+class StorePicker extends Component {
   // event is all the data
   goToStore(event) {
     // prevents the broswer from doing its default action such as sending data in form/refreshing

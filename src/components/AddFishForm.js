@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { Component } from 'react';
 
-class AddFishForm extends React.Component {
+class AddFishForm extends Component {
   createFish(event) {
     event.preventDefault();
     console.log('Gonna Make some fish!');
@@ -12,11 +12,17 @@ class AddFishForm extends React.Component {
       image: this.image.value
     };
     console.log(fish);
+    this.props.addFish(fish);
+    // Clear form
+    this.fishForm.reset();
   }
 
   render() {
     return (
-      <form className="fish-edit" onSubmit={e => this.createFish(e)}>
+      <form
+        ref={input => (this.fishForm = input)}
+        className="fish-edit"
+        onSubmit={e => this.createFish(e)}>
         <input
           ref={input => (this.name = input)}
           type="text"

@@ -1,6 +1,8 @@
 import React from 'react';
 
-const Header = (props) => {
+// Stateless Functional Component
+
+const Header = props => {
   return (
     <header className="top">
       <h1>
@@ -16,6 +18,6 @@ const Header = (props) => {
       </h3>
     </header>
   );
-}
+};
 
 export default Header;

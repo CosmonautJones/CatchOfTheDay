@@ -24,20 +24,20 @@ const Root = () => {
   );
 };
 
-const MyContext = React.createContext();
-class MyProvider extends React.Component {
-  state = {
-    URL: '/'
-  }
-  render() {
-    return (
-      <MyContext.Provider value={{
-        state: this.state,
-      }}>
-        {this.props.children}
-      </MyContext.Provider> 
-    )
-  }
-}
+// const MyContext = React.createContext();
+// class MyProvider extends React.Component {
+//   state = {
+//     URL: '/'
+//   }
+//   render() {
+//     return (
+//       <MyContext.Provider value={{
+//         state: this.state,
+//       }}>
+//         {this.props.children}
+//       </MyContext.Provider>
+//     )
+//   }
+// }
 
 render(<Root />, document.querySelector('#main'));
