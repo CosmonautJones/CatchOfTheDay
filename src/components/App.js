@@ -17,8 +17,10 @@ class App extends Component {
 
     this.addFish = this.addFish.bind(this);
     this.updateFish = this.updateFish.bind(this);
+    this.removeFish = this.removeFish.bind(this);
     this.loadSamples = this.loadSamples.bind(this);
     this.addToOrder = this.addToOrder.bind(this);
+    this.removeFromOrder = this.removeFromOrder.bind(this);
   }
 
   componentWillMount() {
@@ -73,6 +75,13 @@ class App extends Component {
     this.setState({ fishes });
   }
 
+  removeFish(key) {
+    const fishes = { ...this.state.fishes };
+    // to work with firebase, we need to set the value of the fish to null instead of delete fishes[key]
+    fishes[key] = null;
+    this.setState({ fishes });
+  }
+
   loadSamples() {
     this.setState({
       fishes: sampleFishes
@@ -85,6 +94,13 @@ class App extends Component {
     // update or add the new number of fish order
     order[key] = order[key] + 1 || 1;
     // update our state
+    this.setState({ order });
+  }
+
+  removeFromOrder(key) {
+    const order = { ...this.state.order };
+    // since firebase isn't dealing with order we can use delete
+    delete order[key];
     this.setState({ order });
   }
 
@@ -107,6 +123,7 @@ class App extends Component {
         <Order
           fishes={this.state.fishes}
           order={this.state.order}
+          removeFromOrder={this.removeFromOrder}
           params={this.props.location.pathname}
         />
         <Inventory
@@ -114,6 +131,7 @@ class App extends Component {
           loadSamples={this.loadSamples}
           fishes={this.state.fishes}
           updateFish={this.updateFish}
+          removeFish={this.removeFish}
         />
       </div>
     );

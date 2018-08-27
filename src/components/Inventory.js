@@ -15,7 +15,7 @@ class Inventory extends Component {
       ...fish,
       // Vid 20
       [e.target.name]: e.target.value
-    }
+    };
     this.props.updateFish(key, updatedFish);
   }
 
@@ -44,7 +44,7 @@ class Inventory extends Component {
           onChange={e => this.handleChange(e, key)}
           placeholder="Fish Status">
           <option value="avaliable">Fresh!</option>
-          <option value="unavaliable">Sold Out!</option>
+          <option value="unavailable">Sold Out!</option>
         </select>
         <textarea
           name="desc"
@@ -59,6 +59,7 @@ class Inventory extends Component {
           placeholder="Fish Image"
           onChange={e => this.handleChange(e, key)}
         />
+        <button onClick={() => this.props.removeFish(key)}>Remove Fish</button>
       </div>
     );
   }
