@@ -21,6 +21,7 @@ class App extends Component {
   }
 
   componentWillMount() {
+    // runs right before app is rendered
     this.ref = base.syncState(
       `${this.props.history.location.pathname}/fishes`,
       {
@@ -28,14 +29,25 @@ class App extends Component {
         state: 'fishes'
       }
     );
+
+    // check if items are in localStorage
+    const localStorageRef = localStorage.getItem(`order-${this.props.history.location.pathname}`);
+
+    if(localStorageRef) {
+      // update app component
+      this.setState({
+        order: JSON.parse(localStorageRef)
+      })
+    }
   }
 
   componentWillUnmount() {
     base.removeBinding(this.ref);
   }
 
+  // Could use shouldComponentUpdate to prevent mutiple render states
   componentWillUpdate(nextProps, nextState) {
-    localStorage.setItem(`order-${this.props.history.location.pathname}`, 1);
+    localStorage.setItem(`order-${this.props.history.location.pathname}`, JSON.stringify(nextState.order));
   }
 
   addFish(fish) {
@@ -85,7 +97,7 @@ class App extends Component {
           order={this.state.order}
           params={this.props.location.pathname}
         />
-        <Inventory addFish={this.addFish} loadSamples={this.loadSamples} />
+        <Inventory addFish={this.addFish} loadSamples={this.loadSamples} fishes={this.state.fishes} />
       </div>
     );
   }
