@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+
 import { formatPrice } from '../helpers';
 
 class Order extends Component {
@@ -48,6 +50,7 @@ class Order extends Component {
     return (
       <div className="order-wrap">
         <h2>Your Order</h2>
+
         <ul className="order">
           {orderIds.map(this.renderOrder)}
           <li className="total">
@@ -59,5 +62,11 @@ class Order extends Component {
     );
   }
 }
+
+Order.propTypes = {
+  fishes: PropTypes.object.isRequired,
+  order: PropTypes.object.isRequired,
+  removeFromOrder: PropTypes.func.isRequired
+};
 
 export default Order;
