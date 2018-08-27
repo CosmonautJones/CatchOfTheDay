@@ -16,7 +16,7 @@ class Inventory extends Component {
       // Vid 20
       [e.target.name]: e.target.value
     }
-    
+    this.props.updateFish(key, updatedFish);
   }
 
   renderInventory(key) {
@@ -33,13 +33,15 @@ class Inventory extends Component {
         <input
           type="text"
           name="price"
-          value={fish.name}
+          value={fish.price}
           placeholder="Fish Price"
+          onChange={e => this.handleChange(e, key)}
         />
         <select
           type="text"
           name="status"
           value={fish.status}
+          onChange={e => this.handleChange(e, key)}
           placeholder="Fish Status">
           <option value="avaliable">Fresh!</option>
           <option value="unavaliable">Sold Out!</option>
@@ -48,12 +50,14 @@ class Inventory extends Component {
           name="desc"
           value={fish.desc}
           placeholder="Fish Description"
+          onChange={e => this.handleChange(e, key)}
         />
         <input
           type="text"
           name="image"
           value={fish.image}
           placeholder="Fish Image"
+          onChange={e => this.handleChange(e, key)}
         />
       </div>
     );

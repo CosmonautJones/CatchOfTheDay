@@ -16,6 +16,7 @@ class App extends Component {
     };
 
     this.addFish = this.addFish.bind(this);
+    this.updateFish = this.updateFish.bind(this);
     this.loadSamples = this.loadSamples.bind(this);
     this.addToOrder = this.addToOrder.bind(this);
   }
@@ -31,13 +32,15 @@ class App extends Component {
     );
 
     // check if items are in localStorage
-    const localStorageRef = localStorage.getItem(`order-${this.props.history.location.pathname}`);
+    const localStorageRef = localStorage.getItem(
+      `order-${this.props.history.location.pathname}`
+    );
 
-    if(localStorageRef) {
+    if (localStorageRef) {
       // update app component
       this.setState({
         order: JSON.parse(localStorageRef)
-      })
+      });
     }
   }
 
@@ -47,7 +50,10 @@ class App extends Component {
 
   // Could use shouldComponentUpdate to prevent mutiple render states
   componentWillUpdate(nextProps, nextState) {
-    localStorage.setItem(`order-${this.props.history.location.pathname}`, JSON.stringify(nextState.order));
+    localStorage.setItem(
+      `order-${this.props.history.location.pathname}`,
+      JSON.stringify(nextState.order)
+    );
   }
 
   addFish(fish) {
@@ -59,6 +65,12 @@ class App extends Component {
     // set state
     //        state itself: varible ^ of new state
     this.setState({ fishes: fishes });
+  }
+
+  updateFish(key, updatedFish) {
+    const fishes = { ...this.state.fishes };
+    fishes[key] = updatedFish;
+    this.setState({ fishes });
   }
 
   loadSamples() {
@@ -97,7 +109,12 @@ class App extends Component {
           order={this.state.order}
           params={this.props.location.pathname}
         />
-        <Inventory addFish={this.addFish} loadSamples={this.loadSamples} fishes={this.state.fishes} />
+        <Inventory
+          addFish={this.addFish}
+          loadSamples={this.loadSamples}
+          fishes={this.state.fishes}
+          updateFish={this.updateFish}
+        />
       </div>
     );
   }
