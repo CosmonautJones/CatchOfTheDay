@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import base from '../base';
 
 import Header from './Header';
 import Order from './Order';
 import Inventory from './Inventory';
 import Fish from './Fish';
 import sampleFishes from '../sample-fishes';
-import base from '../base';
 
 class App extends Component {
   constructor() {
@@ -141,7 +141,7 @@ class App extends Component {
 }
 
 App.propTypes = {
-  history: PropTypes.object.isRequired 
-}
+  history: PropTypes.object.isRequired
+};
 
 export default App;
