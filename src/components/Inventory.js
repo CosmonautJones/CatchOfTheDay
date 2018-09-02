@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import firebase from 'firebase';
+import base from '../base';
 
 import AddFishForm from './AddFishForm';
+
 
 const oAuthConnect = provider => {
   firebase
@@ -29,6 +31,10 @@ class Inventory extends Component {
     this.renderLogin = this.renderLogin.bind(this);
     this.authenticate = this.authenticate.bind(this);
     this.authHandler = this.authHandler.bind(this);
+  }
+  
+  componentWillMount() {
+    console.log(this.props.history.location.pathname)
   }
 
   handleChange(e, key) {
@@ -57,6 +63,14 @@ class Inventory extends Component {
   }
 
   authHandler(err, authData) {
+    if (err) {
+      console.error(err)
+      return;
+
+      // grap store info
+      const storeRef = base.database().ref(this.props.storeId);
+
+    }
     console.log(err, authData);
   }
 
@@ -163,7 +177,8 @@ Inventory.propTypes = {
   fishes: PropTypes.object.isRequired,
   updateFish: PropTypes.func.isRequired,
   addFish: PropTypes.func.isRequired,
-  loadSamples: PropTypes.func.isRequired
+  loadSamples: PropTypes.func.isRequired,
+  storeId: PropTypes.string.isRequired
 };
 
 export default Inventory;
