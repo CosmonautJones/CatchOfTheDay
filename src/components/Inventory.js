@@ -55,7 +55,7 @@ class Inventory extends Component {
     if (prov === 'github') {
       provider = new firebase.auth.GithubAuthProvider();
     }
-    console.log(`Trying to log in with ${provider}`);
+    console.log(`Trying to log in with ${prov}`);
     
     oAuthConnect(provider);
     // base.signInWithPopup(provider, this.authHandler);

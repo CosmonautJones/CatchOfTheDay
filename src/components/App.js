@@ -26,6 +26,8 @@ class App extends Component {
   }
 
   componentWillMount() {
+    console.log("PATH", this.props.history.location.pathname)
+
     // runs right before app is rendered
     this.ref = base.syncState(
       `${this.props.history.location.pathname}/fishes`,
