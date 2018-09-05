@@ -5,19 +5,6 @@ import base from '../base';
 
 import AddFishForm from './AddFishForm';
 
-
-const oAuthConnect = provider => {
-  firebase
-    .auth()
-    .signInWithPopup(provider)
-    .then(function(authData) {
-      console.log(authData);
-    })
-    .catch(function(error) {
-      console.log(error);
-    });
-  };
-
 class Inventory extends Component {
   constructor() {
     super();
@@ -25,17 +12,17 @@ class Inventory extends Component {
       uid: null,
       owner: null
     };
-    
+
     this.renderInventory = this.renderInventory.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.renderLogin = this.renderLogin.bind(this);
+    this.oAuthConnect = this.oAuthConnect.bind(this);
     this.authenticate = this.authenticate.bind(this);
     this.authHandler = this.authHandler.bind(this);
   }
-  
-  componentWillMount() {
-  }
-  
+
+  componentWillMount() {}
+
   handleChange(e, key) {
     const fish = this.props.fishes[key];
     // take a copy of the fish and update with the new data
@@ -56,36 +43,47 @@ class Inventory extends Component {
       provider = new firebase.auth.GithubAuthProvider();
     }
     console.log(`Trying to log in with ${prov}`);
-    
-    oAuthConnect(provider);
+
+    this.oAuthConnect(provider);
     // base.signInWithPopup(provider, this.authHandler);
   }
-  
-  authHandler(err, authData) {
-    console.log(err, authData);
-    if (err) {
-      console.error(err);
-      return;
-    }
-      const storeName = this.props.storeId.split('').splice(7).join('');
-      console.log(storeName);
-      
-      // grap store info
-      const storeRef = base.database().ref(storeName);
-      
-      // query the firebase database once for the store data
-      storeRef.once('value', (sanpshot) => {
-        const data = sanpshot.val() || {};
 
-        // claim for ownner if no owner already
-        if(!data.owner) {
-          storeRef.set({
-            owner: authData.user.uid
-          });
-        }
+  authHandler(authData) {
+    const storeName = this.props.storeId
+      .split('')
+      .splice(7)
+      .join('');
+    console.log(storeName);
 
+    // grap store info
+    const storeRef = base.database().ref(storeName);
+
+    // query the firebase database once for the store data
+    storeRef.once('value', sanpshot => {
+      const data = sanpshot.val() || {};
+
+      // claim for ownner if no owner already
+      if (!data.owner) {
+        storeRef.set({
+          owner: authData.user.uid
+        });
+      }
+    });
+  }
+
+  oAuthConnect(provider) {
+    firebase
+      .auth()
+      .signInWithPopup(provider)
+      .then(function(authData) {
+        this.authHandler(authData);
+        console.log('THIS!', this);
+      })
+      .catch(function(error) {
+        console.log('AUTH DATA ERROR:');
+        console.log(error);
       });
-    }
+  }
 
   renderLogin() {
     return (
