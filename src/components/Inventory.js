@@ -21,8 +21,6 @@ class Inventory extends Component {
     this.authHandler = this.authHandler.bind(this);
   }
 
-  componentWillMount() {}
-
   handleChange(e, key) {
     const fish = this.props.fishes[key];
     // take a copy of the fish and update with the new data
@@ -48,36 +46,31 @@ class Inventory extends Component {
     // base.signInWithPopup(provider, this.authHandler);
   }
 
-  authHandler(authData) {
+  oAuthConnect(provider) {
+    // get proper storename
     const storeName = this.props.storeId
       .split('')
       .splice(7)
       .join('');
-    console.log(storeName);
 
     // grap store info
-    const storeRef = base.database().ref(storeName);
+    const storeRef = firebase.database().ref('store/' + storeName);
 
-    // query the firebase database once for the store data
-    storeRef.once('value', sanpshot => {
-      const data = sanpshot.val() || {};
-
-      // claim for ownner if no owner already
-      if (!data.owner) {
-        storeRef.set({
-          owner: authData.user.uid
-        });
-      }
-    });
-  }
-
-  oAuthConnect(provider) {
     firebase
       .auth()
       .signInWithPopup(provider)
       .then(function(authData) {
-        this.authHandler(authData);
-        console.log('THIS!', this);
+        // query the firebase database once for the store data
+        return storeRef.once('value', sanpshot => {
+          const data = sanpshot.val() || {};
+          // claim for ownner if no owner already
+          if (!data.owner) {
+            storeRef.set({
+              owner: authData.user.uid
+            });
+          }
+          console.log('Success');
+        });
       })
       .catch(function(error) {
         console.log('AUTH DATA ERROR:');
