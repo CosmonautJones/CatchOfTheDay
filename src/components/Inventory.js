@@ -49,6 +49,7 @@ class Inventory extends Component {
   oAuthConnect(provider) {
     let userID;
     let ownerName;
+    let that = this;
     // get proper storename
     const storeName = this.props.storeId
       .split('')
@@ -73,6 +74,10 @@ class Inventory extends Component {
           }
           userID = authData.user.uid;
           ownerName = data.owner || authData.user.uid
+          that.setState({
+            uid: userID,
+            owner: ownerName
+          })
           
           console.log('Success');
         });
@@ -81,13 +86,6 @@ class Inventory extends Component {
         console.log('AUTH DATA ERROR:');
         console.error(error);
       });
-      console.log('userID', userID);
-      console.log('ownerName', ownerName);
-
-      this.setState({
-        uid: userID,
-        owner: ownerName
-      })
     }
 
     renderLogin() {
