@@ -18,7 +18,7 @@ class Inventory extends Component {
     this.renderLogin = this.renderLogin.bind(this);
     this.oAuthConnect = this.oAuthConnect.bind(this);
     this.authenticate = this.authenticate.bind(this);
-    this.authHandler = this.authHandler.bind(this);
+    // this.authHandler = this.authHandler.bind(this);
   }
 
   handleChange(e, key) {
@@ -31,7 +31,7 @@ class Inventory extends Component {
     };
     this.props.updateFish(key, updatedFish);
   }
-
+  
   authenticate(prov) {
     let provider;
     if (prov === 'facebook') {
@@ -41,12 +41,14 @@ class Inventory extends Component {
       provider = new firebase.auth.GithubAuthProvider();
     }
     console.log(`Trying to log in with ${prov}`);
-
+    
     this.oAuthConnect(provider);
     // base.signInWithPopup(provider, this.authHandler);
   }
-
+  
   oAuthConnect(provider) {
+    let userID;
+    let ownerName;
     // get proper storename
     const storeName = this.props.storeId
       .split('')
@@ -66,19 +68,29 @@ class Inventory extends Component {
           // claim for ownner if no owner already
           if (!data.owner) {
             storeRef.set({
-              owner: authData.user.uid
+              owner: authData.user.uid,
             });
           }
+          userID = authData.user.uid;
+          ownerName = data.owner || authData.user.uid
+          
           console.log('Success');
         });
       })
       .catch(function(error) {
         console.log('AUTH DATA ERROR:');
-        console.log(error);
+        console.error(error);
       });
-  }
+      console.log('userID', userID);
+      console.log('ownerName', ownerName);
 
-  renderLogin() {
+      this.setState({
+        uid: userID,
+        owner: ownerName
+      })
+    }
+
+    renderLogin() {
     return (
       <nav className="login">
         <h2>Inventory</h2>
